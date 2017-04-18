@@ -25,6 +25,13 @@ with graph.as_default():
     bv = tf.Variable(np.random.uniform(-100.0, 100.0, 1).reshape(1, 1), dtype=tf.float32)
 
     xv = tf.placeholder(tf.float32, shape=(1, batch_size))
-    yv = tf.matmul(av, xv) + bv
+    yv = tf.placeholder(tf.float32, shape=(1, batch_size))
+    ypred = tf.matmul(av, xv) + bv
 
-    print yv.get_shape()
+    loss = tf.reduce_sum((ypred - yv) ** 2.0)
+
+    opt = tf.train.AdamOptimizer()
+    opt.minimize(loss)
+
+with tf.Session(graph=graph) as sess:
+    sess.run(tf.global_variables_initializer())
