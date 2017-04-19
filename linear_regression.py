@@ -14,6 +14,11 @@ def createSampleData(samples):
     return xs, ys
 
 
+def makeBatch(batch_size, data_x, data_y):
+    indices = np.random.permutation(data_x.shape[1])[:batch_size]
+    return data_x[:,indices], data_y[:,indices]
+
+
 # plt.scatter(xs, ys)
 # plt.show()
 
@@ -34,10 +39,9 @@ with graph.as_default():
 with tf.Session(graph=graph) as sess:
     sess.run(tf.global_variables_initializer())
 
-    data_x, data_y = createSampleData(1000)
+    data_x, data_y = createSampleData(10000)
     for i in range(10000):
-
-        _, l, a, b = sess.run([opt, loss, av, bv], feed_dict={xv: data_x, yv: data_y})
+        batch_x, batch_y = makeBatch(batch_size, data_x, data_y)
+        _, l, a, b = sess.run([opt, loss, av, bv], feed_dict={xv: batch_x, yv: batch_y})
         print("iter: " + str(i) + " loss: " + str(l))
-        print(a)
-        print(b)
+    print(a, b)
