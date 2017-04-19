@@ -8,7 +8,7 @@ def createSampleData(samples):
     b = -5.0;
     noise_sd = 1.0
 
-    xs = np.random.rand(1, samples) * 10.0
+    xs = np.random.rand(1, samples) * 1.0
     ys = xs * a + b + np.random.normal(0.0, noise_sd, samples)
 
     return xs, ys
@@ -29,7 +29,7 @@ with graph.as_default():
     ypred = tf.add(tf.matmul(av, xv), bv)
 
     loss = tf.reduce_mean(tf.squared_difference(ypred, yv))
-    opt = tf.train.GradientDescentOptimizer(0.01).minimize(loss)
+    opt = tf.train.AdamOptimizer().minimize(loss)
 
 with tf.Session(graph=graph) as sess:
     sess.run(tf.global_variables_initializer())
